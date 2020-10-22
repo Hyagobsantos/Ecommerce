@@ -56,6 +56,7 @@ $app->get('/admin/logout', function() {
 	User::logout();
 
 	header("Location: /admin/login");
+	exit;
 
 });
 

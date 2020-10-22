@@ -20,20 +20,21 @@ class User extends Model {
 
         ));
 
-        if (count($results) === 0) 
+        if (count($results) === 0)  //verificando se retornou algum login 
         {
             throw new \Exception("Usuario Inexistente ou Senha inválida.");
             
         }
 
-        $data = $results[0];
+        $data = $results[0]; //dps que passou pela validação eu atribui a variavel $data o resultado do primeiro indice encontrado 
 
-        if (password_verify($password, $data["despassword"]) === true)
+        if (password_verify($password, $data["despassword"]) === true) //verificando a senha hash do banco pra saber se é a mesma senha 
         {
 
-            $user = new User();
+            $user = new User();  //a partir desse ponto dps de verificado eu preciso dos dados do usuario, para isso é preciso dos gets e sets desse usuario
+                                //ao inves de fazer isso vou fazer o import dinamicamente e não estaticamente criando a partir daqui um atributo private e conseguentimente um get e set para cada um 
 
-            $user->setData($data);
+            $user->setData($data); //vem da classe model que sabe criar meus sets e gets do usuario retornado
 
             $_SESSION[User::SESSION] = $user->getValues();
 
