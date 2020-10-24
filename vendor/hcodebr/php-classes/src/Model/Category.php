@@ -2,6 +2,7 @@
 
 namespace Hcode\Model;
 
+use DirectoryIterator;
 use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Mailer;
@@ -33,6 +34,8 @@ class Category extends Model {
 
             $this->setData($results[0]);
 
+            category::updateFile();
+
     }
 
     public function get($idcategory)
@@ -56,13 +59,23 @@ class Category extends Model {
             $sql->query("DELETE FROM tb_categories WHERE idcategory = :idcategory", [
                 ':idcategory'=>$this->getidcategory()
             ]);
+
+            Category::updateFile();
         }
 
-    
-    
+    public static function updateFile()
+    {
+        $categories = category::listAll();
 
-  
+        $html = [];
 
+        foreach ($categories as $row) {
+            array_push($html, '<li><a href="/categories/'.$row['idcategory'].'">'.$row['descategory'].'</a></li>');
+        }
+        file_put_contents($_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR. "views" .DIRECTORY_SEPARATOR."categories-menu.html", implode('', $html));
+    }
+
+    
 
  }
 
